@@ -1,6 +1,6 @@
 """
 Shadow AI Module — adversarial challenger that exposes bias.
-Uses Google Gemini API with gemini-2.5-flash.
+Uses Google Gemini API with gemini-1.5-flash.
 """
 
 from __future__ import annotations
@@ -84,13 +84,11 @@ async def get_shadow_challenge(domain: str, input_data: dict, context: str) -> d
             response_mime_type="application/json",
         )
     )
-
     user_content = (
         f"Domain: {domain}\n"
         f"Input Data: {json.dumps(input_data)}\n"
         f"Context: {context}"
     )
-
 
     for attempt in range(2):
         try:

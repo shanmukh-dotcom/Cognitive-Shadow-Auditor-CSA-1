@@ -1,6 +1,6 @@
 """
 Primary AI Module — strict, data-driven decision maker.
-Uses Google Gemini API with gemini-2.5-flash.
+Uses Google Gemini API with gemini-1.5-flash.
 """
 
 from __future__ import annotations
