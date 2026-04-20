@@ -1,0 +1,22 @@
+# Environments
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+venv/
+env/
+.venv/
+
+# Credentials
+firebase-credentials.json
+*.pem
+
+# IDEs
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
