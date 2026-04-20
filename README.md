@@ -103,51 +103,46 @@ CSA is not a chatbot. It is not a dashboard. It is a living judicial system for 
 
 ## 🏗️ System Architecture & Workflow
 User Submits Case
-│
-▼
-FastAPI Backend
-/decide endpoint
-│
-├─────────────────────────────────┐
-│                                 │
-▼                                 ▼
-PRIMARY COUNSEL                  SHADOW COUNSEL
-Gemini 1.5 Flash                 Gemini 1.5 Flash
-(strict, data-driven)            (adversarial, bias-hunting)
-→ verdict                        → counter_verdict
-→ confidence (0-100)             → challenge_strength (0-100)
-→ reasoning                      → counter_reasoning
-→ key_factors[]                  → bias_flags[]
-→ missed_factors[]
-│                                 │
-└──────────────┬──────────────────┘
-│
-▼
-THE ARBITER
-(Pure Python Logic)
-Tension Score = f(
-confidence,
-challenge_strength,
-verdict_clash,
-bias_flags
-)
-│
-┌───────────┼───────────┐
-│           │           │
-▼           ▼           ▼
-0 – 40      40 – 70     70 – 100
-RESOLVED    CONTESTED    ESCALATED
-Output +    Output +     → Human
-Audit Trail  Warnings    Review Queue
-│                        │
-▼                        ▼
-Firebase Firestore        Firebase Firestore
-(decisions table)         (escalations table)
-│
-▼
-React Frontend
-Decision Arena
-(Framer Motion UI)
+                               │
+                               ▼
+              FastAPI Backend `/decide` endpoint
+                               │
+               ┌───────────────┴───────────────┐
+               │                               │
+               ▼                               ▼
+        PRIMARY COUNSEL                  SHADOW COUNSEL
+      (Gemini 1.5 Flash)               (Gemini 1.5 Flash)
+    (strict, data-driven)         (adversarial, bias-hunting)
+    → verdict                     → counter_verdict
+    → confidence (0-100)          → challenge_strength (0-100)
+    → reasoning                   → counter_reasoning
+    → key_factors[]               → bias_flags[]
+                                  → missed_factors[]
+               │                               │
+               └───────────────┬───────────────┘
+                               │
+                               ▼
+                          THE ARBITER 
+                      (Pure Python Logic)
+          Tension Score = f(confidence, challenge_strength, 
+                            verdict_clash, bias_flags)
+                               │
+          ┌────────────────────┼────────────────────┐
+          │                    │                    │
+          ▼                    ▼                    ▼
+       0 – 40               40 – 70             70 – 100
+      RESOLVED             CONTESTED            ESCALATED
+ Output + Audit Trail  Output + Warnings   Human Review Queue
+          │                    │                    │
+          └─────────┬──────────┘                    │
+                    ▼                               ▼
+           Firebase Firestore               Firebase Firestore
+           (decisions table)               (escalations table)
+                    │                               │
+                    └──────────────┬────────────────┘
+                                   ▼
+                             React Frontend
+                    Decision Arena (Framer Motion UI)
 
 **Key architectural decisions:**
 
